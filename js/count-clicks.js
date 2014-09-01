@@ -17,8 +17,8 @@ jQuery( document ).ready(function() {
 			}, function( response ) { }
 			);
 
+		window.open(url,"_blank");
 
 	});
-
 
 });

@@ -10,8 +10,8 @@ License: 		Copyright (c) 2013 The Badger Herald
 
 TODO:
 
-This plugin should be extended to also include links to any other article on the web, using
-embed.ly's embedding service. - wjh.
+ - This plugin should be extended to also include links to any other article on the web, using
+   embed.ly's embedding service.
 
 */
 
@@ -48,7 +48,7 @@ function hrld_inline_link_embed_enqueue ( ) {
  *
  * $_POST[] Variables:
  * 		hrld_inline_url - the url clicked.
- *		hrld_inline_id - the id of the post.
+ *		hrld_inline_id 	- the id of the post.
  * 
  * @author Will Haynes
  */
@@ -60,21 +60,23 @@ function hrld_inline_click_submit_handler() {
 	if ( ! wp_verify_nonce( $nonce, 'urlQuery-nonce' ) )
 		die ( 'Busted!');
 
-	$key = "_hrld-inline-click-" . $_POST["hrld_inline_url"];
 	$id = $_POST["hrld_inline_id"];
 
-	$curClicks = get_post_meta($id,$key,true);
+	if( ! current_user_can('edit_post',$id) ) {
+		$key = "_hrld-inline-click-" . $_POST["hrld_inline_url"];
+	
 
-	if($curClicks == "" ) {
-		add_post_meta($id,$key,1,true);
-	} else {
-		update_post_meta($id,$key,$curClicks+1);
+		$curClicks = get_post_meta($id,$key,true);
+
+		if($curClicks == "" ) {
+			add_post_meta($id,$key,1,true);
+		} else {
+			update_post_meta($id,$key,$curClicks+1);
+		}
 	}
 
-	return print_r($_POST);
+	return;
 }
-
-
 add_action( 'wp_ajax_ajax-hrld_inline_click_script', 'hrld_inline_click_submit_handler' );
 add_action( 'wp_ajax_nopriv_ajax-hrld_inline_click_script', 'hrld_inline_click_submit_handler' );
 
@@ -104,7 +106,9 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 
 	// For now.
 
-	$url = str_replace("badgerherald.com","localhost/bhrld",$url);
+	if( home_url() == "http://localhost/bhrld") {
+		$url = str_replace("badgerherald.com","localhost/bhrld",$url);
+	}
 
 	$ret = "";
 
@@ -129,7 +133,7 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 	$ret .=	"<span class='hrld-inline-link-title'>";
 
 	if( current_user_can('edit_post') && $clicks != "") { 
-		$ret .= "<span class='hrld-inline-click-count'>" . $click . "Click";
+		$ret .= "<span class='hrld-inline-click-count'>" . $clicks . " Click";
 		if($clicks != 1) {
 			$ret .= "s";
 		}
