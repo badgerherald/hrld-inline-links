@@ -108,6 +108,8 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 
 	if( home_url() == "http://localhost/bhrld") {
 		$url = str_replace("badgerherald.com","localhost/bhrld",$url);
+	} else if( home_url() == "http://localhost:8080/bhrld") {
+		$url = str_replace("badgerherald.com","localhost:8080/bhrld",$url);
 	}
 
 	$ret = "";
@@ -118,7 +120,7 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 	// Query the post.
 	$p = get_post($postid);
 
-	$ret .= "<a target='_BLANK' class='hrld-inline-link' href='" . get_permalink($postid) . "'>";
+	$ret .= "<a target='_BLANK' class='hrld-inline-link' href='" . $url . "'>";
 
 	$thumb 	= wp_get_attachment_image_src( get_post_thumbnail_id($postid), 'small-thumbnail' );
 
@@ -140,7 +142,7 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 		$ret .= "</span> | ";
 	}
 
-	$ret .= get_the_title($postid) . "</span>";
+	$ret .= $p->post_title . "</span>";
 
 	/* append the excerpt */
 
