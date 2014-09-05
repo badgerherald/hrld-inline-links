@@ -44,10 +44,14 @@ $caption: 	open sans, helvetica, arial, sans-serif;
 		position: relative;
 		top: -3px;
 	}
-	.hrld-inline-link-except {
+	.hrld-inline-link-excerpt {
 		display: none;
 		font-size: 14px;
 		line-height: 21px;
+		&.hrld-inline-link-excerpt-small {
+			display: inline;
+			word-wrap: break-word;
+		}
 	}
 	.hrld-inline-click-count {
 		color: $hrld-blue;
@@ -77,7 +81,12 @@ $caption: 	open sans, helvetica, arial, sans-serif;
 @media (min-width: 760px) {
 
 
-	.hrld-inline-link .hrld-inline-link-except {
-		display: block;
+	.hrld-inline-link {
+		.hrld-inline-link-excerpt {
+			display: block;
+			&.hrld-inline-link-excerpt-small {
+				display: none;
+			}
+		}
 	}
 }

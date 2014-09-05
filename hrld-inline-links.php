@@ -145,10 +145,12 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 	$ret .= $p->post_title . "</span>";
 
 	/* append the excerpt */
+	setup_postdata($p);
+	$excerpt = get_the_excerpt();
+	wp_reset_postdata($p);
 
-	$excerpt = wp_trim_words($p->post_content, 20, "<span class='excerpt-more'> ...</span>");
 
-	$ret .= "<span class='hrld-inline-link-except'>" . $excerpt . "</span>";
+	$ret .= "<span class='hrld-inline-link-excerpt'>" . $excerpt . "</span><span class=' hrld-inline-link-excerpt hrld-inline-link-excerpt-small'>badgerherald.com</span>";
 
 
 	$ret .= "<span class='clearfix'></span></a>";

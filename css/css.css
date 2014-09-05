@@ -26,10 +26,13 @@
     display: block;
     position: relative;
     top: -3px; }
-  .hrld-inline-link .hrld-inline-link-except {
+  .hrld-inline-link .hrld-inline-link-excerpt {
     display: none;
     font-size: 14px;
     line-height: 21px; }
+    .hrld-inline-link .hrld-inline-link-excerpt.hrld-inline-link-excerpt-small {
+      display: inline;
+      word-wrap: break-word; }
   .hrld-inline-link .hrld-inline-click-count {
     color: #3c74b9; }
   .hrld-inline-link img.hrld-inline-thumbnail {
@@ -48,5 +51,7 @@
   display: block; }
 
 @media (min-width: 760px) {
-  .hrld-inline-link .hrld-inline-link-except {
-    display: block; } }
+  .hrld-inline-link .hrld-inline-link-excerpt {
+    display: block; }
+    .hrld-inline-link .hrld-inline-link-excerpt.hrld-inline-link-excerpt-small {
+      display: none; } }
