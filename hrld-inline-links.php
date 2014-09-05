@@ -25,7 +25,7 @@ function hrld_inline_link_embed_enqueue ( ) {
 
 	global $post;
 
-	wp_register_style( 'hrld_inline_link_style', plugins_url( 'css/css.css', __FILE__ ), false, '1.0.1' );
+	wp_register_style( 'hrld_inline_link_style', plugins_url( 'css/css.css', __FILE__ ), false, '1.0.0' );
 	wp_enqueue_style(  'hrld_inline_link_style' );
 
 	wp_enqueue_script( 'hrld_inline_click_script', plugins_url( 'js/count-clicks.js', __FILE__ ), array( 'jquery' ));
