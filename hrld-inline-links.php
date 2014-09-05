@@ -146,10 +146,9 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 
 	/* append the excerpt */
 	$excerpt = $p->post_content;
-	$re1='.*?';	
 	$re2='((?:http|https)(?::\\/{2}[\\w]+)(?:[\\/|\\.]?)(?:[^\\s"]*))';	
 
-	$excerpt = preg_replace("/".$re1.$re2."/is", "", $excerpt);
+	$excerpt = preg_replace("/".$re2."/is", "", $excerpt);
 
 	$excerpt = wp_trim_words($excerpt, 20, '<span class="excerpt-more"> ...</span>');
 
