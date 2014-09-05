@@ -145,9 +145,13 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 	$ret .= $p->post_title . "</span>";
 
 	/* append the excerpt */
-	setup_postdata($p);
-	$excerpt = get_the_excerpt();
-	wp_reset_postdata($p);
+	$excerpt = $p->post_content;
+	$re1='.*?';	
+	$re2='((?:http|https)(?::\\/{2}[\\w]+)(?:[\\/|\\.]?)(?:[^\\s"]*))';	
+
+	$excerpt = preg_replace("/".$re1.$re2."/is", "", $excerpt);
+
+	$excerpt = wp_trim_words($excerpt, 20, '<span class="excerpt-more"> ...</span>');
 
 
 	$ret .= "<span class='hrld-inline-link-excerpt'>" . $excerpt . "</span><span class=' hrld-inline-link-excerpt hrld-inline-link-excerpt-small'>badgerherald.com</span>";
