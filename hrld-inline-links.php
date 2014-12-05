@@ -146,7 +146,7 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 
 	/* append the excerpt */
 	$excerpt = $p->post_content;
-	strip_shortcodes($excerpt);
+	$excerpt = strip_shortcodes($excerpt);
 	$re2='((?:http|https)(?::\\/{2}[\\w]+)(?:[\\/|\\.]?)(?:[^\\s"]*))';	
 	
 	$excerpt = preg_replace("/".$re2."/is", "", $excerpt);
