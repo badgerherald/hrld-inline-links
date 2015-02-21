@@ -1,5 +1,4 @@
 <?php
-
 /*
 Plugin Name: 	Hrld Inline Links
 Description: 	Makes URLs pasted on their own line inline links that can be styled as desired.
@@ -18,22 +17,25 @@ TODO:
 
 /**
  * Enqueue's scripts and styles for plugin operation.
- *
+ * 
+ * @since 0.1
  * @author Will Haynes
  */
-function hrld_inline_link_embed_enqueue ( ) {
+function hrld_inline_link_embed_enqueue () {
 
 	global $post;
 
-	wp_register_style( 'hrld_inline_link_style', plugins_url( 'css/css.css', __FILE__ ), false, '1.0.0' );
-	wp_enqueue_style(  'hrld_inline_link_style' );
+	// Styling for the inline link
+	wp_enqueue_style( 'hrld_inline_link_style', plugins_url( 'css/css.css', __FILE__ ), false, '1.0.0' );
 
+	// Count the clicks.
 	wp_enqueue_script( 'hrld_inline_click_script', plugins_url( 'js/count-clicks.js', __FILE__ ), array( 'jquery' ));
 
+	// When enqueueing the script, provide some js variables.
     wp_localize_script( 'hrld_inline_click_script', 'hrld_inline_click', array(
         'ajaxurl'       => admin_url( 'admin-ajax.php' ),
         'id'			=> $post->ID,
-        'nonce'    	 	=> wp_create_nonce( 'urlQuery-nonce' ))
+        'nonce'    	 	=> wp_create_nonce( 'hrld-count-click' ))
     );
 
 
@@ -50,6 +52,7 @@ function hrld_inline_link_embed_enqueue ( ) {
  * 		hrld_inline_url - the url clicked.
  *		hrld_inline_id 	- the id of the post.
  * 
+ * @since 0.1
  * @author Will Haynes
  */
 function hrld_inline_click_submit_handler() {
@@ -57,47 +60,45 @@ function hrld_inline_click_submit_handler() {
 	global $wpdb;
 
 	$nonce = $_POST['nonce']; 	
-	if ( ! wp_verify_nonce( $nonce, 'urlQuery-nonce' ) )
-		die ( 'Busted!');
+	if ( ! wp_verify_nonce( $nonce, 'hrld-count-click' ) )
+		die ( 'Nice Try' );
 
-	$id = $_POST["hrld_inline_id"];
+	$pid = $_POST["hrld_inline_id"];
 
-	if( ! current_user_can('edit_post',$id) ) {
+	// Only count clicks from users who can't edit the post.
+	if( ! current_user_can('edit_post',$pid) ) {
+	
 		$key = "_hrld-inline-click-" . $_POST["hrld_inline_url"];
 	
-
-		$curClicks = get_post_meta($id,$key,true);
+		$curClicks = get_post_meta($pid,$key,true);
 
 		if($curClicks == "" ) {
-			add_post_meta($id,$key,1,true);
+			add_post_meta($pid,$key,1,true);
 		} else {
-			update_post_meta($id,$key,$curClicks+1);
+			update_post_meta($pid,$key,$curClicks+1);
 		}
 	}
 
 	return;
+
 }
 add_action( 'wp_ajax_ajax-hrld_inline_click_script', 'hrld_inline_click_submit_handler' );
 add_action( 'wp_ajax_nopriv_ajax-hrld_inline_click_script', 'hrld_inline_click_submit_handler' );
 
-
-/**
- * Registers a new callback when a badgerherald.com link is 
- * posted on its own line within the editor.
- */
-wp_embed_register_handler( 'herald', '*http://badgerherald.com/*', 'hrld_inline_link_embed' );
-
 /**
  * Parses the passed in http://badgerherald.com url and returns output 'embed' code.
  *
- * To support development enviornments, we alter the URL to include the local
+ * To support development environment, we alter the URL to include the local
  * site url.
  *
+ * @since 0.1
  * @author Will Haynes
+ * 
  * @param $matches array — the part of the url that was matched by the regex.
  * @param $attr array - sizing info for the embed.
  * @param $url string - the url to embed.
  * @param $rawattr array - other attributes passed in.
+ * 
  * @return embed code.
  */
 function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
@@ -153,11 +154,15 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 
 	$excerpt = wp_trim_words($excerpt, 20, '<span class="excerpt-more"> ...</span>');
 
-
 	$ret .= "<span class='hrld-inline-link-excerpt'>" . $excerpt . "</span><span class=' hrld-inline-link-excerpt hrld-inline-link-excerpt-small'>badgerherald.com</span>";
 
 
-	$ret .= "<span class='clearfix'></span></a>";
+	$ret .= "</a>";
 
 	return $ret;
 }
+/**
+ * Registers a new callback when a badgerherald.com link is 
+ * posted on its own line within the editor.
+ */
+wp_embed_register_handler( 'herald', '*http://badgerherald.com/*', 'hrld_inline_link_embed' );
