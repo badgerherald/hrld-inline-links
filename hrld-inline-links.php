@@ -154,7 +154,7 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 
 	$excerpt = wp_trim_words($excerpt, 20, '<span class="excerpt-more"> ...</span>');
 
-	$ret .= "<span class='hrld-inline-link-excerpt'>" . $excerpt . "</span><span class=' hrld-inline-link-excerpt hrld-inline-link-excerpt-small'>badgerherald.com</span>";
+	$ret .= "<span class='hrld-inline-link-excerpt'>" . $excerpt . "</span>";
 
 
 	$ret .= "</a>";
