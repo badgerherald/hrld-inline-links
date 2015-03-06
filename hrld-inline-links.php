@@ -165,4 +165,4 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
  * Registers a new callback when a badgerherald.com link is 
  * posted on its own line within the editor.
  */
-wp_embed_register_handler( 'herald', '*http://badgerherald.com/*', 'hrld_inline_link_embed' );
+wp_embed_register_handler( 'herald', '*(?:http|https)://badgerherald.com/*', 'hrld_inline_link_embed' );
