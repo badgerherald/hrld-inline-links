@@ -25,11 +25,14 @@ function hrld_inline_link_embed_enqueue () {
 
 	global $post;
 
-	// Styling for the inline link
+	// Styling for the inline link.
 	wp_enqueue_style( 'hrld_inline_link_style', plugins_url( 'css/css.css', __FILE__ ), false, '1.0.0' );
 
 	// Count the clicks.
 	wp_enqueue_script( 'hrld_inline_click_script', plugins_url( 'js/count-clicks.js', __FILE__ ), array( 'jquery' ));
+
+	// also add the style to tiny mce.
+	add_editor_style( plugins_url( 'css/css.css', __FILE__ ) );
 
 	// When enqueueing the script, provide some js variables.
     wp_localize_script( 'hrld_inline_click_script', 'hrld_inline_click', array(
@@ -135,7 +138,7 @@ function hrld_inline_link_embed( $matches, $attr, $url, $rawattr ) {
 
 	$ret .=	"<span class='hrld-inline-link-title'>";
 
-	if( current_user_can('edit_post') && $clicks != "") { 
+	if( is_user_logged_in() && current_user_can('edit_post') && $clicks != "") { 
 		$ret .= "<span class='hrld-inline-click-count'>" . $clicks . " Click";
 		if($clicks != 1) {
 			$ret .= "s";
